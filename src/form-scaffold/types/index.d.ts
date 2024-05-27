@@ -1,11 +1,11 @@
 import React from "react";
 import type {FormInstance} from "antd";
-import type {ComponentNameEnum} from "../utils/components-map";
+import type {ComponentNameEnum, ComponentPropsMap} from "../utils/components-map";
 import type {FormScaffoldProps} from "../index";
 
 export type UseFormScaffold = () => [(props: FormScaffoldProps) => React.JSX.Element, {
     form: FormInstance<any>;
-    CHILD: ComponentNameEnum;
+    CHILD: ComponentNameEnum<keyof ComponentPropsMap>;
 }];
 
 

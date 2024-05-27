@@ -1,6 +1,6 @@
 {
   "name": "enc-formscaffold",
-  "version": "0.0.13",
+  "version": "0.0.16",
   "description": "",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -13,6 +13,10 @@
   "keywords": [],
   "authors": [],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Oct-17/enc-formscaffold.git"
+  },
   "files": [
     "dist",
     "compiled"

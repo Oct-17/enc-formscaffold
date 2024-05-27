@@ -18,6 +18,7 @@ import {
     Upload,
 } from 'antd';
 import React from "react";
+import {FormScaffoldItem} from "../index";
 
 const {RangePicker: RangeDate} = DatePicker;
 const {RangePicker: RangeTime} = TimePicker;

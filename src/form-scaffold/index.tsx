@@ -28,13 +28,13 @@ export interface FormScaffoldChild {
 export interface FormScaffoldItem<K extends keyof ComponentPropsMap> {
   id: string | string[];
   label: string | React.ReactNode;
-  rules: string[] | FormRule[] | undefined;
+  rules?: string[] | FormRule[];
   child: K;
   render?: (props: FormScaffoldItem<K>, form: FormInstance) => React.ReactNode;
   fieldProps?: ComponentPropsMap[K];
   containerRender?: (form: FormInstance) => React.ReactNode;
   weight?: string | number;
-  rootClassName: string;
+  rootClassName?: string;
   placeholder?: string;
   style?: React.CSSProperties;
 }
@@ -69,7 +69,7 @@ const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<
   return (
     <Form.Item
       rootClassName={props.rootClassName}
-      style={{width: props.weight || 'auto', ...props.style}}
+      style={{...props.style, width: props.weight || 'auto',}}
       name={props.id}
       // @ts-ignore
       rules={ruleHelper(props.rules, childProps.placeholder)}
@@ -97,7 +97,7 @@ const RenderWrap = (props: FormScaffoldChild) => {
           </Flex>
         );
       } else {
-        return <RenderItem
+        return <RenderItem<typeof item.child>
           style={{flex: 1}}
           key={item.id as React.Key}
           {...item}

@@ -3,7 +3,7 @@ import {
   Cascader,
   Checkbox,
   ColorPicker,
-  DatePicker, type FormRule, GetProps,
+  DatePicker,
   Input,
   InputNumber,
   Mentions,
@@ -17,6 +17,7 @@ import {
   TreeSelect,
   Upload,
 } from 'antd';
+import type {GetProps} from "antd";
 import React from "react";
 
 const {RangePicker: RangeDate} = DatePicker;
@@ -98,9 +99,9 @@ type SnakeCase<S extends string, FirstPart extends boolean = true> =
                 : '_'}${Uppercase<First>}${SnakeCase<Rest, false>}`
         : S;
 
-export type ComponentNameEnum = Record<SnakeCase<keyof ComponentPropsMap>, keyof ComponentPropsMap>;
+export type ComponentNameEnum<T extends keyof ComponentPropsMap> = Record<SnakeCase<T>, T>;
 
-export const componentNameEnum: ComponentNameEnum = {
+export const componentNameEnum: ComponentNameEnum<keyof ComponentPropsMap> = {
   INPUT: 'Input',
   AUTO_COMPLETE: 'AutoComplete',
   SELECT: 'Select',
