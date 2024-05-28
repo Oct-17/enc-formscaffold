@@ -24,7 +24,7 @@ const {RangePicker: RangeDate} = DatePicker;
 const {RangePicker: RangeTime} = TimePicker;
 const {Search, TextArea, Password, Group: InputGroup} = Input;
 const {Group: CheckboxGroup} = Checkbox;
-const {Group: RadioGroup} = Radio;
+const {Group: RadioGroup, Button: RadioButton} = Radio;
 
 
 export interface ComponentPropsMap {
@@ -54,6 +54,7 @@ export interface ComponentPropsMap {
   InputGroup: GetProps<typeof InputGroup>,
   CheckboxGroup: GetProps<typeof CheckboxGroup>,
   RadioGroup: GetProps<typeof RadioGroup>,
+  RadioButton: GetProps<typeof RadioButton>,
 }
 
 export type ComponentMap = {
@@ -87,6 +88,7 @@ export const componentsMap: ComponentMap = {
   InputGroup,
   CheckboxGroup,
   RadioGroup,
+  RadioButton,
 };
 
 
@@ -99,7 +101,7 @@ type SnakeCase<S extends string, FirstPart extends boolean = true> =
                 : '_'}${Uppercase<First>}${SnakeCase<Rest, false>}`
         : S;
 
-export type ComponentNameEnum<T extends keyof ComponentPropsMap> = Record<SnakeCase<T>, T>;
+export type ComponentNameEnum<T extends keyof ComponentPropsMap = "Input"> = Record<SnakeCase<T>, T>;
 
 export const componentNameEnum: ComponentNameEnum<keyof ComponentPropsMap> = {
   INPUT: 'Input',
@@ -127,4 +129,5 @@ export const componentNameEnum: ComponentNameEnum<keyof ComponentPropsMap> = {
   CHECKBOX_GROUP: 'CheckboxGroup',
   RADIO: 'Radio',
   RADIO_GROUP: 'RadioGroup',
+  RADIO_BUTTON: 'RadioButton'
 };

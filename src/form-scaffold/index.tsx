@@ -1,6 +1,6 @@
 import './style.less';
 import React from 'react';
-import {Flex, Form, GetProps} from 'antd';
+import {Flex, Form, FormItemProps, GetProp, GetProps} from 'antd';
 import type {FormProps, FormInstance, FormRule} from 'antd';
 import {componentNameEnum, componentsMap} from './utils/components-map';
 import {ruleHelper} from './utils/rule-picker'
@@ -25,12 +25,15 @@ export interface FormScaffoldChild {
   layout?: string;
 }
 
-export interface FormScaffoldItem<K extends keyof ComponentPropsMap> {
+export interface FormScaffoldItem<K extends keyof ComponentPropsMap>
+  extends Omit<FormItemProps, 'id' | 'rules'>
+{
   id: string | string[];
   label: string | React.ReactNode;
   rules?: string[] | FormRule[];
   child: K;
   render?: (props: FormScaffoldItem<K>, form: FormInstance) => React.ReactNode;
+  initialValue?: any;
   fieldProps?: ComponentPropsMap[K];
   containerRender?: (form: FormInstance) => React.ReactNode;
   weight?: string | number;
@@ -68,9 +71,11 @@ const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<
 
   return (
     <Form.Item
+      {...props as FormItemProps}
       rootClassName={props.rootClassName}
       style={{...props.style, width: props.weight || 'auto',}}
       name={props.id}
+      initialValue={props.initialValue}
       // @ts-ignore
       rules={ruleHelper(props.rules, childProps.placeholder)}
       label={props.label}
@@ -78,8 +83,7 @@ const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<
       {customRender ? (
         customRender(props, form)
       ) : (
-          // @ts-ignore
-        <Comp {...childProps} />
+        <Comp {...childProps as any} />
       )}
     </Form.Item>
   );
@@ -97,7 +101,7 @@ const RenderWrap = (props: FormScaffoldChild) => {
           </Flex>
         );
       } else {
-        return <RenderItem<typeof item.child>
+        return <RenderItem
           style={{flex: 1}}
           key={item.id as React.Key}
           {...item}
