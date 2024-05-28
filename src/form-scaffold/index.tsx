@@ -1,6 +1,6 @@
 import './style.less';
 import React from 'react';
-import {Flex, Form, FormItemProps, GetProp, GetProps} from 'antd';
+import {Flex, Form, FormItemProps} from 'antd';
 import type {FormProps, FormInstance, FormRule} from 'antd';
 import {componentNameEnum, componentsMap} from './utils/components-map';
 import {ruleHelper} from './utils/rule-picker'
