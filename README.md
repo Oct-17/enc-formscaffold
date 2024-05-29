@@ -11,6 +11,18 @@ $ npm install enc-formscaffold
 
 ## Usage
 
+```npm
+git clone https://github.com/Oct-17/enc-formscaffold.git
+npm install
+npm run dev
+
+## 在其他项目中使用
+## 需要安装 antd5, react18
+
+npm link your-path/enc-formscaffold
+
+```
+
 ```jsx
 import useFormscaffold from 'enc-formscaffold';
 import {Button} from "antd";
