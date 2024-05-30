@@ -17,8 +17,9 @@ import {
   TreeSelect,
   Upload,
 } from 'antd';
-import type {GetProps} from "antd";
 import React from "react";
+import {AntdComponentProps} from "../types/antd-component";
+import {FormScaffoldChild, FormScaffoldItem} from "../index";
 
 const {RangePicker: RangeDate} = DatePicker;
 const {RangePicker: RangeTime} = TimePicker;
@@ -27,38 +28,38 @@ const {Group: CheckboxGroup} = Checkbox;
 const {Group: RadioGroup, Button: RadioButton} = Radio;
 
 
-export interface ComponentPropsMap {
-  // [key: string]: keyof componentArr>
-  Radio: GetProps<typeof Radio>,
-  Input: GetProps<typeof Input>,
-  AutoComplete: GetProps<typeof AutoComplete>,
-  InputNumber: GetProps<typeof InputNumber>,
-  Select: GetProps<typeof Select>,
-  Cascader: GetProps<typeof Cascader>,
-  Switch: GetProps<typeof Switch>,
-  Slider: GetProps<typeof Slider>,
-  TimePicker: GetProps<typeof TimePicker>,
-  DatePicker: GetProps<typeof DatePicker>,
-  Rate: GetProps<typeof Rate>,
-  ColorPicker: GetProps<typeof ColorPicker>,
-  Transfer: GetProps<typeof Transfer>,
-  TreeSelect: GetProps<typeof TreeSelect>,
-  Mentions: GetProps<typeof Mentions>,
-  Upload: GetProps<typeof Upload>,
-  Checkbox: GetProps<typeof Checkbox>,
-  RangeDate: GetProps<typeof RangeDate>,
-  RangeTime: GetProps<typeof RangeTime>,
-  Search: GetProps<typeof Search>,
-  TextArea: GetProps<typeof TextArea>,
-  Password: GetProps<typeof Password>,
-  InputGroup: GetProps<typeof InputGroup>,
-  CheckboxGroup: GetProps<typeof CheckboxGroup>,
-  RadioGroup: GetProps<typeof RadioGroup>,
-  RadioButton: GetProps<typeof RadioButton>,
-}
+// export interface ComponentPropsMap {
+//   // [key: string]: keyof componentArr>
+//   Radio: GetProps<typeof Radio>,
+//   Input: GetProps<typeof Input>,
+//   AutoComplete: GetProps<typeof AutoComplete>,
+//   InputNumber: GetProps<typeof InputNumber>,
+//   Select: GetProps<typeof Select>,
+//   Cascader: GetProps<typeof Cascader>,
+//   Switch: GetProps<typeof Switch>,
+//   Slider: GetProps<typeof Slider>,
+//   TimePicker: GetProps<typeof TimePicker>,
+//   DatePicker: GetProps<typeof DatePicker>,
+//   Rate: GetProps<typeof Rate>,
+//   ColorPicker: GetProps<typeof ColorPicker>,
+//   Transfer: GetProps<typeof Transfer>,
+//   TreeSelect: GetProps<typeof TreeSelect>,
+//   Mentions: GetProps<typeof Mentions>,
+//   Upload: GetProps<typeof Upload>,
+//   Checkbox: GetProps<typeof Checkbox>,
+//   RangeDate: GetProps<typeof RangeDate>,
+//   RangeTime: GetProps<typeof RangeTime>,
+//   Search: GetProps<typeof Search>,
+//   TextArea: GetProps<typeof TextArea>,
+//   Password: GetProps<typeof Password>,
+//   InputGroup: GetProps<typeof InputGroup>,
+//   CheckboxGroup: GetProps<typeof CheckboxGroup>,
+//   RadioGroup: GetProps<typeof RadioGroup>,
+//   RadioButton: GetProps<typeof RadioButton>,
+// }
 
 export type ComponentMap = {
-  [K in keyof ComponentPropsMap]: React.ComponentType<ComponentPropsMap[K]>;
+  [K in keyof AntdComponentProps]: React.ComponentType<AntdComponentProps[K]>;
 }
 
 
@@ -101,9 +102,9 @@ type SnakeCase<S extends string, FirstPart extends boolean = true> =
                 : '_'}${Uppercase<First>}${SnakeCase<Rest, false>}`
         : S;
 
-export type ComponentNameEnum<T extends keyof ComponentPropsMap = "Input"> = Record<SnakeCase<T>, T>;
+export type ComponentNameEnum<T extends keyof AntdComponentProps> = Record<SnakeCase<T>, T>;
 
-export const componentNameEnum: ComponentNameEnum<keyof ComponentPropsMap> = {
+export const componentNameEnum: ComponentNameEnum<keyof AntdComponentProps> = {
   INPUT: 'Input',
   AUTO_COMPLETE: 'AutoComplete',
   SELECT: 'Select',

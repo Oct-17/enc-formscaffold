@@ -1,6 +1,7 @@
-import {componentNameEnum, ComponentPropsMap} from "./components-map.js";
+import {componentNameEnum} from "./components-map.js";
 import type {FormScaffoldItem} from "../index";
 import type {SelectProps} from "antd";
+import {AntdComponentProps} from "../types/antd-component";
 
 const selectMap = [
   componentNameEnum.SELECT,
@@ -8,7 +9,7 @@ const selectMap = [
   componentNameEnum.CASCADER,
 ];
 
-export const generatePlaceholder = <K extends keyof ComponentPropsMap>(item: FormScaffoldItem<K>): string => {
+export const generatePlaceholder = <K extends keyof AntdComponentProps>(item: FormScaffoldItem<K>): string => {
   if (selectMap.includes(item.child)) {
     return `请选择${item.label}`;
   }

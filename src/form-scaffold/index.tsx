@@ -7,13 +7,12 @@ import {ruleHelper} from './utils/rule-picker'
 import {generatePlaceholder} from './utils/component-help.js';
 import proxyFormHooks from './utils/hooks';
 import {omit} from "./utils/tools";
-import type {ComponentPropsMap, ComponentMap} from './utils/components-map';
+import type {ComponentMap} from './utils/components-map';
 import {UseFormScaffold} from "./types";
+import {AntdComponentProps, GenerateOption} from "./types/antd-component";
 
 export interface FormScaffoldProps {
   form?: FormInstance;
-  options: FormScaffoldItem<keyof ComponentPropsMap>[];
-  layout?: string;
   formLayout?: FormProps['layout'];
   formProps?: FormProps;
   className?: string;
@@ -21,43 +20,62 @@ export interface FormScaffoldProps {
 }
 
 export interface FormScaffoldChild {
-  options: FormScaffoldItem<keyof ComponentPropsMap>[];
+  options: Array<FormScaffoldItem<keyof AntdComponentProps>>;
   layout?: string;
 }
 
-export interface FormScaffoldItem<K extends keyof ComponentPropsMap>
-  extends Omit<FormItemProps, 'id' | 'rules'>
+export const generateOption: GenerateOption = (key, obj) => {
+  return {
+    ...obj,
+    child: key,
+  }
+};
+
+export interface FormScaffoldItem<T extends keyof AntdComponentProps> extends Omit<FormItemProps, 'id' | 'rules' | 'render'>
 {
   id: string | string[];
   label: string | React.ReactNode;
   rules?: string[] | FormRule[];
-  child: K;
-  render?: (props: FormScaffoldItem<K>, form: FormInstance) => React.ReactNode;
-  initialValue?: any;
-  fieldProps?: ComponentPropsMap[K];
+  child: T;
+  render?: (props: FormScaffoldItem<T>, form: FormInstance) => React.ReactNode;
+  fieldProps?: AntdComponentProps[T];
   containerRender?: (form: FormInstance) => React.ReactNode;
   weight?: string | number;
-  rootClassName?: string;
   placeholder?: string;
-  style?: React.CSSProperties;
 }
 
 const idRegistration = {}; // id注册表
 
-const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<T>) => {
+const childProps: FormScaffoldChild = {
+  options: [
+    {
+      id: 'asd',
+      label: 'asd',
+      child: 'Select',
+      fieldProps: {
+        open: true,
+      },
+    }
+  ],
+  layout: 'horizontal',
+}
+
+const RenderItem = <T extends keyof AntdComponentProps = 'Input'>(_props: FormScaffoldItem<T>) => {
   const props = {..._props};
   const form = Form.useFormInstance();
   if (props.containerRender) {
     return props.containerRender(form);
   }
 
-  const Comp: ComponentMap[T] = componentsMap[props.child || componentNameEnum.INPUT];
+
+  // @ts-ignore
+  const Comp: ComponentMap = componentsMap[props.child || componentNameEnum.INPUT];
 
   const customRender = props.render || null;
 
 
-  // @ts-ignore
-  const childProps: ComponentPropsMap[T] = {
+
+  const childProps: AntdComponentProps[T] = {
     // @ts-ignore
     placeholder: props.placeholder || generatePlaceholder(props),
     ...(props.fieldProps || {}),
@@ -83,6 +101,7 @@ const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<
       {customRender ? (
         customRender(props, form)
       ) : (
+        // @ts-ignore
         <Comp {...childProps as any} />
       )}
     </Form.Item>
@@ -92,7 +111,7 @@ const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<
 const RenderWrap = (props: FormScaffoldChild) => {
   const {options, layout} = props;
 
-  const generateComp = (list: FormScaffoldItem<keyof ComponentPropsMap>[]) => {
+  const generateComp = <T extends keyof AntdComponentProps>(list: FormScaffoldItem<keyof AntdComponentProps>[]) => {
     return (list || []).map((item, index) => {
       if (Array.isArray(item)) {
         return (
@@ -114,7 +133,7 @@ const RenderWrap = (props: FormScaffoldChild) => {
   return generateComp(options);
 };
 
-const FormScaffoldComponent = (props: FormScaffoldProps) => {
+const FormScaffoldComponent = (props: FormScaffoldProps & FormScaffoldChild) => {
   const {form, options, layout, formLayout, formProps} = props;
 
   return (
@@ -132,7 +151,7 @@ export const useFormScaffold: UseFormScaffold = () => {
 
   const proxyForm = proxyFormHooks(form);
 
-  const FormScaffold = (props: FormScaffoldProps) => (
+  const FormScaffold = (props: FormScaffoldProps  & FormScaffoldChild) => (
     <FormScaffoldComponent {...props} form={proxyForm} />
   );
 
