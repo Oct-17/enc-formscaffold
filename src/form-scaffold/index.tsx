@@ -30,12 +30,13 @@ export interface FormScaffoldItem<K extends keyof ComponentPropsMap>
 {
   id: string | string[];
   label: string | React.ReactNode;
+  _label?: string;
   rules?: string[] | FormRule[];
   child: K;
   render?: (props: FormScaffoldItem<K>, form: FormInstance) => React.ReactNode;
   initialValue?: any;
   fieldProps?: ComponentPropsMap[K];
-  containerRender?: (form: FormInstance) => React.ReactNode;
+  containerRender?: ((form: FormInstance) => React.ReactNode) | React.ReactNode;
   weight?: string | number;
   rootClassName?: string;
   placeholder?: string;
@@ -48,7 +49,9 @@ const RenderItem = <T extends keyof ComponentPropsMap>(_props: FormScaffoldItem<
   const props = {..._props};
   const form = Form.useFormInstance();
   if (props.containerRender) {
-    return props.containerRender(form);
+    const Comp = props.containerRender;
+    // @ts-ignore
+    return typeof Comp === 'function' ? props.containerRender(form) : props.containerRender;
   }
 
   const Comp: ComponentMap[T] = componentsMap[props.child || componentNameEnum.INPUT];
@@ -96,7 +99,7 @@ const RenderWrap = (props: FormScaffoldChild) => {
     return (list || []).map((item, index) => {
       if (Array.isArray(item)) {
         return (
-          <Flex key={index} align={'center'} gap={20}>
+          <Flex align={'center'} gap={20} key={`wrap-${item.id}`}>
             {generateComp(item)}
           </Flex>
         );
@@ -137,4 +140,16 @@ export const useFormScaffold: UseFormScaffold = () => {
   );
 
   return [FormScaffold, {form: proxyForm, CHILD: componentNameEnum}];
+};
+
+interface FormScaffold {
+  (props: FormScaffoldProps): React.JSX.Element;
+  form?: FormInstance;
+}
+
+export const FormScaffold: FormScaffold = (props) => {
+  const [form] = Form.useForm();
+  FormScaffold.form = proxyFormHooks(form);
+
+  return <FormScaffoldComponent {...props} form={form} />;
 };

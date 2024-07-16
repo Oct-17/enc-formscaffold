@@ -1,6 +1,6 @@
 {
   "name": "enc-formscaffold",
-  "version": "0.0.21",
+  "version": "0.0.28",
   "description": "",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

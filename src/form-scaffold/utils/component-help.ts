@@ -6,14 +6,15 @@ const selectMap = [
   componentNameEnum.SELECT,
   componentNameEnum.DATE_PICKER,
   componentNameEnum.CASCADER,
+  componentNameEnum.TREE_SELECT,
 ];
 
 export const generatePlaceholder = <K extends keyof ComponentPropsMap>(item: FormScaffoldItem<K>): string => {
   if (selectMap.includes(item.child)) {
-    return `请选择${item.label}`;
+    return `请选择${item.label || item._label}`;
   }
 
-  return `请输入${item.label}`;
+  return `请输入${item.label || item._label}`;
 };
 
 export const formatDate = (format: string) => {};

@@ -8,7 +8,7 @@ const proxyFormHooks = (form: FormInstance): FormInstance<any> => {
         .then((values) => {
           const result = { ...values };
           Object.keys(values).forEach((key) => {
-            if (typeof values[key] === "object") {
+            if (typeof values[key] === "object" && values[key]) {
               const innerKeys = Object.keys(values[key]);
               if (innerKeys.length === 1) {
                 const innerKey = innerKeys[0];

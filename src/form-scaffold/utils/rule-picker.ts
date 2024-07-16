@@ -5,12 +5,12 @@ const ruleMap: Record<string, (msg: string) => FormRule> = {
   req: (msg: string) => ({ required: true, message: msg || "请输入" }),
   phone: (msg: any) => ({
     pattern: /^1[3-9]\d{9}$/,
-    message: msg || "请输入正确的手机号",
+    message: "请输入正确的手机号",
     trigger: "change",
   }),
   email: (msg: any) => ({
     pattern: /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/,
-    message: msg || "请输入正确的邮箱",
+    message: "请输入正确的邮箱",
     trigger: "change",
   }),
   password: (msg: any) => ({
